@@ -18,8 +18,8 @@ import simoncherry.cookbookkotlin.ui.BaseView
 interface ApiTestContract {
     interface View : BaseView {
         fun onQueryCategorySuccess(value: MobCategoryResult?)
-        fun onQueryRecipe(value: MobRecipeResult?)
-        fun onQueryDetail(value: MobRecipe?)
+        fun onQueryRecipeSuccess(value: MobRecipeResult?)
+        fun onQueryDetailSuccess(value: MobRecipe?)
     }
 
     interface Presenter : BasePresenter<View> {

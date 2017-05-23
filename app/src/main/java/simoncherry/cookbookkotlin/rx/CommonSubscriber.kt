@@ -1,7 +1,7 @@
 package simoncherry.cookbookkotlin.rx
 
 import io.reactivex.subscribers.ResourceSubscriber
-import simoncherry.cookbookkotlin.api.BaseCallback
+import simoncherry.cookbookkotlin.ui.BaseView
 
 /**
  * <pre>
@@ -12,23 +12,23 @@ import simoncherry.cookbookkotlin.api.BaseCallback
  *     version: 1.0
  * </pre>
  */
-abstract class CommonSubscriber<T>(var callback: BaseCallback) : ResourceSubscriber<T>() {
+abstract class CommonSubscriber<T>(var view: BaseView?) : ResourceSubscriber<T>() {
 
     override fun onStart() {
         super.onStart()
-        callback.onStart()
+        view?.onShowProgressBar()
     }
 
     override fun onError(t: Throwable?) {
-        callback.onEnd()
-        callback.onQueryError(t?.message ?: "未知错误")
+        view?.onHideProgressBar()
+        view?.onQueryError(t?.message ?: "未知错误")
     }
 
     override fun onNext(t: T?) {
-        callback.onEnd()
+        view?.onHideProgressBar()
     }
 
     override fun onComplete() {
-        callback.onEnd()
+        view?.onHideProgressBar()
     }
 }

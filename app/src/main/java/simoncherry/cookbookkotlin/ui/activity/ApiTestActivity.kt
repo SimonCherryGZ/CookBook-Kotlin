@@ -6,7 +6,6 @@ import simoncherry.cookbookkotlin.R
 import simoncherry.cookbookkotlin.model.MobCategoryResult
 import simoncherry.cookbookkotlin.model.MobRecipe
 import simoncherry.cookbookkotlin.model.MobRecipeResult
-import simoncherry.cookbookkotlin.mvp.biz.ApiTestBiz
 import simoncherry.cookbookkotlin.mvp.contract.ApiTestContract
 import simoncherry.cookbookkotlin.mvp.presenter.ApiTestPresenter
 
@@ -33,43 +32,18 @@ class ApiTestActivity : BaseActivity<ApiTestContract.View, ApiTestContract.Prese
     }
 
     override fun initComponent() {
-        mPresenter = ApiTestPresenter(ApiTestBiz())
+        mPresenter = ApiTestPresenter()
     }
 
     fun queryCategory() {
-//        MobAPIService.getMobAPI()
-//                .queryCategory(MobAPIService.MOB_API_KEY)
-//                .compose(RxUtils.rxSchedulerHelper())
-//                .compose(RxUtils.handleMobResult())
-//                .subscribe { t -> tv_result.text = t?.toString() ?: "获取目录为空" }
         mPresenter?.queryCategory()
     }
 
     fun queryRecipe(cid : String, page : Int, size: Int) {
-//        val params = HashMap<String, String>()
-//        params.put("key", MobAPIService.MOB_API_KEY)
-//        params.put("cid", cid)
-//        params.put("page", page.toString())
-//        params.put("size", size.toString())
-//
-//        MobAPIService.getMobAPI()
-//                .queryRecipe(params)
-//                .compose(RxUtils.rxSchedulerHelper())
-//                .compose(RxUtils.handleMobResult())
-//                .subscribe { t -> tv_result.text = t?.toString() ?: "获取菜谱为空" }
         mPresenter?.queryRecipe(cid, page, size)
     }
 
     fun queryDetail(id : String) {
-//        val params = HashMap<String, String>()
-//        params.put("key", MobAPIService.MOB_API_KEY)
-//        params.put("id", id)
-//
-//        MobAPIService.getMobAPI()
-//                .queryDetail(params)
-//                .compose(RxUtils.rxSchedulerHelper())
-//                .compose(RxUtils.handleMobResult())
-//                .subscribe { t -> tv_result.text = t?.toString() ?: "获取详情为空" }
         mPresenter?.queryDetail(id)
     }
 
@@ -85,11 +59,11 @@ class ApiTestActivity : BaseActivity<ApiTestContract.View, ApiTestContract.Prese
         tv_result.text = value?.toString() ?: "获取目录为空"
     }
 
-    override fun onQueryRecipe(value: MobRecipeResult?) {
+    override fun onQueryRecipeSuccess(value: MobRecipeResult?) {
         tv_result.text = value?.toString() ?: "获取菜谱为空"
     }
 
-    override fun onQueryDetail(value: MobRecipe?) {
+    override fun onQueryDetailSuccess(value: MobRecipe?) {
         tv_result.text = value?.toString() ?: "获取详情为空"
     }
 }
