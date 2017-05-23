@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="white">#ffffff</color>
     <color name="black_tv">#333333</color>
     <color name="gray_tv">#666666</color>
     <color name="gray_hint">#999999</color>

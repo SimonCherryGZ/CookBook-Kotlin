@@ -8,10 +8,9 @@ import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ProgressBar
-import butterknife.ButterKnife
-import butterknife.Unbinder
 import com.simoncherry.cookbookkotlin.mvp.presenter.BasePresenter
 import com.simoncherry.cookbookkotlin.ui.BaseView
+import com.simoncherry.cookbookkotlin.util.ToastUtils
 
 /**
  * <pre>
@@ -25,13 +24,11 @@ import com.simoncherry.cookbookkotlin.ui.BaseView
 abstract class BaseActivity<in V : BaseView, T : BasePresenter<V>> : AppCompatActivity(), BaseView {
     var mPresenter: T? = null
     lateinit var mContext: Activity
-    lateinit var mUnBinder: Unbinder
     var mProgressBar: ProgressBar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayout())
-        mUnBinder = ButterKnife.bind(this)
         mContext = this
         initComponent()
         mPresenter?.attachView(this as V)
@@ -43,7 +40,6 @@ abstract class BaseActivity<in V : BaseView, T : BasePresenter<V>> : AppCompatAc
     override fun onDestroy() {
         super.onDestroy()
         mPresenter?.detachView()
-        mUnBinder.unbind()
     }
 
     private fun initProgressBar() {
@@ -63,5 +59,9 @@ abstract class BaseActivity<in V : BaseView, T : BasePresenter<V>> : AppCompatAc
 
     override fun onHideProgressBar() {
         mProgressBar?.visibility = View.GONE
+    }
+
+    override fun onShowToast(msg: String) {
+        ToastUtils.show(mContext, msg)
     }
 }

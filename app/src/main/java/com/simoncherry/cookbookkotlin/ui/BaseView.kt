@@ -14,4 +14,5 @@ interface BaseView {
     fun onQueryError(msg: String)
     fun onShowProgressBar()
     fun onHideProgressBar()
+    fun onShowToast(msg: String)
 }

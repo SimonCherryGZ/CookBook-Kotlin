@@ -12,6 +12,6 @@ import java.util.*
  * </pre>
  */
 data class MobCategoryChild1(
-        var categoryInfo: MobCategory?,
+        var categoryInfo: MobCategory,
         var childs: ArrayList<MobCategoryChild2>?
 )

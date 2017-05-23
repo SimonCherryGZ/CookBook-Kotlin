@@ -2,6 +2,8 @@ package com.simoncherry.cookbookkotlin.ui.activity
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -9,12 +11,19 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.simoncherry.cookbookkotlin.R
+import com.simoncherry.cookbookkotlin.ui.fragment.CategoryFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
-class MainActivity : SimpleActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : SimpleActivity(),
+        NavigationView.OnNavigationItemSelectedListener,
+        CategoryFragment.OnFragmentInteractionListener{
 
-    var exitTime : Long = 0
+    lateinit var fragmentManager: FragmentManager
+    private var currentFragment: Fragment? = null
+    private var previousFragment: Fragment? = null
+    private var categoryFragment: CategoryFragment? = null
+    private var exitTime : Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +68,7 @@ class MainActivity : SimpleActivity(), NavigationView.OnNavigationItemSelectedLi
 
     private fun init() {
         initView()
+        initFragment()
     }
 
     private fun initView() {
@@ -72,5 +82,46 @@ class MainActivity : SimpleActivity(), NavigationView.OnNavigationItemSelectedLi
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+    }
+
+    private fun initFragment() {
+        fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+
+        categoryFragment = CategoryFragment.newInstance()
+
+        previousFragment = categoryFragment
+        currentFragment = categoryFragment
+
+        transaction
+                .add(R.id.layout_content, categoryFragment)
+                .show(categoryFragment)
+                .commit()
+    }
+
+    private fun switchFragment(from: Fragment, to: Fragment) {
+        if (from != to) {
+            val transaction = fragmentManager.beginTransaction()
+            transaction
+                    .hide(from)
+                    .show(to)
+                    .commit()
+            previousFragment = from
+            currentFragment = to
+        }
+    }
+
+    private fun backToFragment(from: Fragment, to: Fragment) {
+        val transaction = fragmentManager.beginTransaction()
+        transaction
+                .hide(from)
+                .show(to)
+                .commit()
+        previousFragment = null
+        currentFragment = to
+    }
+
+    override fun onClickCategory(ctgId: String, name: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
