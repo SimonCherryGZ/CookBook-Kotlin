@@ -8,8 +8,8 @@ import com.orhanobut.logger.Logger
 import com.simoncherry.cookbookkotlin.R
 import com.simoncherry.cookbookkotlin.model.MobCategory
 import com.simoncherry.cookbookkotlin.model.RealmCategory
-import com.simoncherry.cookbookkotlin.ui.adapter.childCategoryAdapter
-import com.simoncherry.cookbookkotlin.ui.adapter.parentCategoryAdapter
+import com.simoncherry.cookbookkotlin.ui.adapter.ChildCategoryAdapter
+import com.simoncherry.cookbookkotlin.ui.adapter.ParentCategoryAdapter
 import com.simoncherry.cookbookkotlin.util.GridSpacingItemDecoration
 import com.simoncherry.cookbookkotlin.util.RealmHelper
 import io.realm.Realm
@@ -30,9 +30,9 @@ class CategoryFragment : SimpleFragment() {
 
     private val TAG = CategoryFragment::class.java.simpleName
 
-    lateinit var parentCategoryAdapter: parentCategoryAdapter
+    lateinit var parentCategoryAdapter: ParentCategoryAdapter
     lateinit var parentList: MutableList<MobCategory>
-    lateinit var childCategoryAdapter: childCategoryAdapter
+    lateinit var childCategoryAdapter: ChildCategoryAdapter
     lateinit var allChildList: MutableList<List<MobCategory>>
     lateinit var childList: MutableList<MobCategory>
 
@@ -92,8 +92,8 @@ class CategoryFragment : SimpleFragment() {
 
     private fun initRecyclerView() {
         parentList = ArrayList<MobCategory>()
-        parentCategoryAdapter = parentCategoryAdapter(mContext, parentList)
-        parentCategoryAdapter.setOnItemClickListener(object : parentCategoryAdapter.OnItemClickListener {
+        parentCategoryAdapter = ParentCategoryAdapter(mContext, parentList)
+        parentCategoryAdapter.setOnItemClickListener(object : ParentCategoryAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 if (allChildList.size > position) {
                     childList.clear()
@@ -108,8 +108,8 @@ class CategoryFragment : SimpleFragment() {
 
         allChildList = ArrayList<List<MobCategory>>()
         childList = ArrayList<MobCategory>()
-        childCategoryAdapter = childCategoryAdapter(mContext, childList)
-        childCategoryAdapter.setOnItemClickListener(object : childCategoryAdapter.OnItemClickListener {
+        childCategoryAdapter = ChildCategoryAdapter(mContext, childList)
+        childCategoryAdapter.setOnItemClickListener(object : ChildCategoryAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 if (childList.size > position) {
                     onClickCategory(childList[position].ctgId, childList[position].name)

@@ -20,9 +20,9 @@ import kotlinx.android.synthetic.main.item_tag.view.*
  *     version: 1.0
  * </pre>
  */
-class childCategoryAdapter(
+class ChildCategoryAdapter(
         var mContext: Context,
-        var mData: List<MobCategory>) : RecyclerView.Adapter<childCategoryAdapter.MyViewHolder>() {
+        var mData: List<MobCategory>) : RecyclerView.Adapter<ChildCategoryAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MyViewHolder {
         return MyViewHolder(LayoutInflater.from(mContext.applicationContext)

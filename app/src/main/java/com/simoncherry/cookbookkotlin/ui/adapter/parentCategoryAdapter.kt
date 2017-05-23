@@ -20,9 +20,9 @@ import kotlinx.android.synthetic.main.item_category.view.*
  *     version: 1.0
  * </pre>
  */
-class parentCategoryAdapter(
+class ParentCategoryAdapter(
         var mContext: Context,
-        var mData: List<MobCategory>) : RecyclerView.Adapter<parentCategoryAdapter.MyViewHolder>() {
+        var mData: List<MobCategory>) : RecyclerView.Adapter<ParentCategoryAdapter.MyViewHolder>() {
 
     override fun getItemCount(): Int {
         return mData.size
@@ -30,7 +30,7 @@ class parentCategoryAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val mobCategory = mData[position]
-        holder.tvName.text = mobCategory.name
+        holder.tvName.text = mobCategory.name.substring(1, 3)
 
         if (mobCategory.isSelected) {
             holder.layoutRoot.setBackgroundColor(Color.WHITE)
