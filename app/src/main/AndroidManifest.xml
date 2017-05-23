@@ -11,21 +11,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.simoncherry.cookbookkotlin.ui.activity.ApiTestActivity">
-             <!--<intent-filter> -->
-                 <!--<action android:name="android.intent.action.MAIN" /> -->
-                 <!---->
-                 <!--<category android:name="android.intent.category.LAUNCHER" /> -->
-             <!--</intent-filter> -->
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity
             android:name="com.simoncherry.cookbookkotlin.ui.activity.MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar.Trans">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
     </application>
 
