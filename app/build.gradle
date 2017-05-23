@@ -1,12 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "simoncherry.cookbookkotlin"
+        applicationId "com.simoncherry.cookbookkotlin"
         minSdkVersion 14
         targetSdkVersion 25
         versionCode 1
@@ -38,6 +39,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.orhanobut:logger:1.15'
+    compile 'org.greenrobot:greendao:3.2.2'
 }
 repositories {
     mavenCentral()
