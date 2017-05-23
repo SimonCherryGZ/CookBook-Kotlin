@@ -85,7 +85,7 @@ class CategoryFragment : SimpleFragment() {
         init()
     }
 
-    fun init() {
+    private fun init() {
         initRecyclerView()
         initRealm()
     }

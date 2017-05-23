@@ -122,6 +122,6 @@ class MainActivity : SimpleActivity(),
     }
 
     override fun onClickCategory(ctgId: String, name: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

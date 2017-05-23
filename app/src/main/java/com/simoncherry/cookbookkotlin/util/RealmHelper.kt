@@ -19,7 +19,7 @@ class RealmHelper {
 
     companion object {
         fun convertMobCategoryToRealmCategory(mobCategory: MobCategory, isChild: Boolean): RealmCategory {
-            val realmCategory = RealmCategory(mobCategory.ctgId, mobCategory.parentId, mobCategory.name, isChild, mobCategory.isSelected)
+            val realmCategory = RealmCategory(mobCategory.ctgId, mobCategory.name, mobCategory.parentId, isChild, mobCategory.isSelected)
             return realmCategory
         }
 
@@ -36,7 +36,7 @@ class RealmHelper {
         }
 
         fun convertRealmCategoryToMobCategory(realmCategory: RealmCategory): MobCategory {
-            val mobCategory = MobCategory(realmCategory.ctgId, realmCategory.parentId, realmCategory.name, realmCategory.isSelected)
+            val mobCategory = MobCategory(realmCategory.ctgId, realmCategory.name, realmCategory.parentId, realmCategory.isSelected)
             return mobCategory
         }
     }
