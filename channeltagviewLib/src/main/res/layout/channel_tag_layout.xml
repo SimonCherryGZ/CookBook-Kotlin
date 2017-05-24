@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/categray_added_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/category_banner_view_bg"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="首页显示&#160;&#160;&#160;&#160;*左右滑动移除"
+        android:textColor="#ffffff" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/added_channel_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/categray_unadded_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/category_banner_view_bg"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:text="更多分类&#160;&#160;&#160;&#160;*点击添加到首页"
+        android:textColor="#ffffff" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/unAdded_channel_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:padding="10dp" />
+
+</merge>
