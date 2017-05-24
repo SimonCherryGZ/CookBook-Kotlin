@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.item_recipe.view.*
  */
 class RecipeAdapter(
         var mContext: Context,
-        var mData: List<MobRecipe>)  : RecyclerView.Adapter<RecipeAdapter.MyViewHolder>() {
+        var mData: List<MobRecipe>) : RecyclerView.Adapter<RecipeAdapter.MyViewHolder>() {
 
     private val TXT_DEFAULT = "Null"
 

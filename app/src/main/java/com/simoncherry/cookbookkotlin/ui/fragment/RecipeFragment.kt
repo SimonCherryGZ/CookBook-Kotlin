@@ -1,8 +1,10 @@
 package com.simoncherry.cookbookkotlin.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.kogitune.activity_transition.ActivityTransitionLauncher
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.simoncherry.cookbookkotlin.R
@@ -10,6 +12,7 @@ import com.simoncherry.cookbookkotlin.model.MobRecipe
 import com.simoncherry.cookbookkotlin.model.MobRecipeResult
 import com.simoncherry.cookbookkotlin.mvp.contract.RecipeContract
 import com.simoncherry.cookbookkotlin.mvp.presenter.RecipePresenter
+import com.simoncherry.cookbookkotlin.ui.activity.DetailActivity
 import com.simoncherry.cookbookkotlin.ui.adapter.RecipeAdapter
 import kotlinx.android.synthetic.main.fragment_recipe.*
 import java.util.*
@@ -125,10 +128,10 @@ class RecipeFragment : BaseFragment<RecipeContract.View, RecipeContract.Presente
     }
 
     private fun startDetailActivity(view: View, recipeId: String, thumbnail: String) {
-//        val intent = Intent(activity, DetailActivity::class.java)
-//        intent.putExtra(DetailActivity.KEY_RECIPE_ID, recipeId)
-//        intent.putExtra(DetailActivity.KEY_THUMBNAIL, thumbnail)
-//        ActivityTransitionLauncher.with(activity).from(view).launch(intent)
+        val intent = Intent(activity, DetailActivity::class.java)
+        intent.putExtra(DetailActivity.KEY_RECIPE_ID, recipeId)
+        intent.putExtra(DetailActivity.KEY_THUMBNAIL, thumbnail)
+        ActivityTransitionLauncher.with(activity).from(view).launch(intent)
     }
 
     private fun initRefreshLayout() {
