@@ -33,6 +33,7 @@ class MainActivity : SimpleActivity(),
     private lateinit var categoryFragment: CategoryFragment
     private lateinit var collectionFragment: CollectionFragment
     private lateinit var historyFragment: HistoryFragment
+    private lateinit var settingFragment: SettingFragment
     private lateinit var recipeFragment: RecipeFragment
     internal var searchView: SearchView? = null
     private var exitTime : Long = 0
@@ -145,6 +146,7 @@ class MainActivity : SimpleActivity(),
             }
             R.id.nav_manage -> {
                 toolbar.setTitle(R.string.main_title_setting)
+                switchFragment(currentFragment, settingFragment)
             }
         }
 
@@ -179,21 +181,24 @@ class MainActivity : SimpleActivity(),
         categoryFragment = CategoryFragment.newInstance()
         collectionFragment = CollectionFragment.newInstance()
         historyFragment = HistoryFragment.newInstance()
+        settingFragment = SettingFragment.newInstance()
         recipeFragment = RecipeFragment.newInstance("0010001010")
 
-        previousFragment = categoryFragment
-        currentFragment = categoryFragment
+        previousFragment = mainFragment
+        currentFragment = mainFragment
 
         transaction
                 .add(R.id.layout_content, mainFragment)
                 .add(R.id.layout_content, categoryFragment)
                 .add(R.id.layout_content, collectionFragment)
                 .add(R.id.layout_content, historyFragment)
+                .add(R.id.layout_content, settingFragment)
                 .add(R.id.layout_content, recipeFragment)
                 .show(mainFragment)
                 .hide(categoryFragment)
                 .hide(collectionFragment)
                 .hide(historyFragment)
+                .hide(settingFragment)
                 .hide(recipeFragment)
                 .commit()
     }
