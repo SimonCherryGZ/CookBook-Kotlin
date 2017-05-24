@@ -1,17 +1,24 @@
 package com.simoncherry.cookbookkotlin.ui.activity
 
+import android.app.SearchManager
+import android.content.Context
+import android.content.Intent
+import android.database.Cursor
 import android.os.Bundle
+import android.provider.SearchRecentSuggestions
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.simoncherry.cookbookkotlin.R
 import com.simoncherry.cookbookkotlin.ui.fragment.*
+import com.simoncherry.cookbookkotlin.util.MySuggestionProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -27,6 +34,7 @@ class MainActivity : SimpleActivity(),
     private lateinit var collectionFragment: CollectionFragment
     private lateinit var historyFragment: HistoryFragment
     private lateinit var recipeFragment: RecipeFragment
+    internal var searchView: SearchView? = null
     private var exitTime : Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,12 +46,28 @@ class MainActivity : SimpleActivity(),
         return R.layout.activity_main
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        if (Intent.ACTION_SEARCH == intent.action) {
+            val query = intent.getStringExtra(SearchManager.QUERY)
+            val suggestions = SearchRecentSuggestions(this,
+                    MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE)
+            suggestions.saveRecentQuery(query, null)
+        }
+    }
+
     override fun onBackPressed() {
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
-            if (previousFragment is CategoryFragment && currentFragment is RecipeFragment) {
+            if (searchView != null && !searchView!!.isIconified) {
+                searchView?.isIconified = true
+            } else if (previousFragment is CategoryFragment && currentFragment is RecipeFragment) {
                 backToFragment(currentFragment, previousFragment)
                 toolbar.setTitle(R.string.main_title_category)
             } else {
@@ -59,6 +83,44 @@ class MainActivity : SimpleActivity(),
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main, menu)
+        val searchItem = menu?.findItem(R.id.search_view)  //在菜单中找到对应控件的item
+        val searchManager = this@MainActivity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        if (searchItem != null) {
+            searchView = searchItem.actionView as SearchView
+        }
+
+        if (searchView != null) {
+            val finalSearchView = searchView
+            searchView?.setSearchableInfo(searchManager.getSearchableInfo(this@MainActivity.componentName))
+            searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    onQueryRecipeByName(query)
+                    finalSearchView?.isIconified = true
+                    finalSearchView?.isIconified = true
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    return false
+                }
+            })
+
+            searchView?.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
+                override fun onSuggestionSelect(position: Int): Boolean {
+                    return false
+                }
+
+                override fun onSuggestionClick(position: Int): Boolean {
+                    val cursor = finalSearchView?.suggestionsAdapter?.getItem(position) as Cursor
+                    val query = cursor.getString(cursor.getColumnIndex(SearchManager.SUGGEST_COLUMN_TEXT_1))
+                    onQueryRecipeByName(query)
+                    finalSearchView.isIconified = true
+                    return false
+                }
+            })
+        }
+
         return true
     }
 
@@ -162,5 +224,11 @@ class MainActivity : SimpleActivity(),
         recipeFragment.changeCategory(ctgId)
         switchFragment(currentFragment, recipeFragment)
         toolbar.title = "分类 - " + name
+    }
+
+    private fun onQueryRecipeByName(name: String) {
+        recipeFragment.queryRecipeByName(name)
+        switchFragment(currentFragment, recipeFragment)
+        toolbar.title = "查询 - " + name
     }
 }

@@ -164,4 +164,12 @@ class RecipeFragment : BaseFragment<RecipeContract.View, RecipeContract.Presente
         rv_recipe.scrollToPosition(0)
         queryRecipeByField(field, value, currentPage)
     }
+
+    fun queryRecipeByName(name: String) {
+        this.field = "name"
+        this.value = name
+        currentPage = 1
+        rv_recipe.scrollToPosition(0)
+        queryRecipeByField(field, value, currentPage)
+    }
 }

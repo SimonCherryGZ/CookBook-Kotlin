@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <provider
+            android:name=".util.MySuggestionProvider"
+            android:authorities="com.simoncherry.cookbookkotlin.util.MySuggestionProvider" />
+
         <activity
             android:name=".ui.activity.SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -25,7 +29,15 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar.Trans" />
+            android:theme="@style/AppTheme.NoActionBar.Trans" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
         <activity
             android:name=".ui.activity.DetailActivity"
             android:theme="@style/AppTheme.NoActionBar.Trans" />
