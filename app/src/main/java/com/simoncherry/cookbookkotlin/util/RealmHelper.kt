@@ -116,5 +116,29 @@ class RealmHelper {
                 realm.close()
             }
         }
+
+        fun setFirstChildCategorySelected(realm: Realm) {
+            realm.executeTransaction { realm ->
+                val results = realm.where(RealmCategory::class.java)
+                        .equalTo("isChild", true)
+                        .findAll()
+                if (results.size > 0) {
+                    val realmCategory = results.first()
+                    realmCategory.isSelected = true
+                }
+            }
+        }
+
+        fun changeCategorySelectedByCtgId(realm: Realm, ctgId: String, isSelected: Boolean) {
+            realm.executeTransactionAsync { realm ->
+                val results = realm.where(RealmCategory::class.java)
+                        .equalTo("ctgId", ctgId)
+                        .findAll()
+                if (results.size > 0) {
+                    val realmCategory = results.first()
+                    realmCategory.isSelected = isSelected
+                }
+            }
+        }
     }
 }

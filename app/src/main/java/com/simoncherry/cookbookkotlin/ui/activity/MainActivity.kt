@@ -11,10 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.simoncherry.cookbookkotlin.R
-import com.simoncherry.cookbookkotlin.ui.fragment.CategoryFragment
-import com.simoncherry.cookbookkotlin.ui.fragment.CollectionFragment
-import com.simoncherry.cookbookkotlin.ui.fragment.HistoryFragment
-import com.simoncherry.cookbookkotlin.ui.fragment.RecipeFragment
+import com.simoncherry.cookbookkotlin.ui.fragment.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -25,6 +22,7 @@ class MainActivity : SimpleActivity(),
     private lateinit var fragmentManager: FragmentManager
     private lateinit var currentFragment: Fragment
     private lateinit var previousFragment: Fragment
+    private lateinit var mainFragment: MainFragment
     private lateinit var categoryFragment: CategoryFragment
     private lateinit var collectionFragment: CollectionFragment
     private lateinit var historyFragment: HistoryFragment
@@ -67,7 +65,10 @@ class MainActivity : SimpleActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         when (id) {
-            R.id.nav_home -> toolbar.setTitle(R.string.main_title_home)
+            R.id.nav_home -> {
+                toolbar.setTitle(R.string.main_title_home)
+                switchFragment(currentFragment, mainFragment)
+            }
             R.id.nav_category -> {
                 toolbar.setTitle(R.string.main_title_category)
                 switchFragment(currentFragment, categoryFragment)
@@ -80,7 +81,9 @@ class MainActivity : SimpleActivity(),
                 toolbar.setTitle(R.string.main_title_history)
                 switchFragment(currentFragment, historyFragment)
             }
-            R.id.nav_manage -> toolbar.setTitle(R.string.main_title_setting)
+            R.id.nav_manage -> {
+                toolbar.setTitle(R.string.main_title_setting)
+            }
         }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
@@ -110,6 +113,7 @@ class MainActivity : SimpleActivity(),
         fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
 
+        mainFragment = MainFragment.newInstance()
         categoryFragment = CategoryFragment.newInstance()
         collectionFragment = CollectionFragment.newInstance()
         historyFragment = HistoryFragment.newInstance()
@@ -119,11 +123,13 @@ class MainActivity : SimpleActivity(),
         currentFragment = categoryFragment
 
         transaction
+                .add(R.id.layout_content, mainFragment)
                 .add(R.id.layout_content, categoryFragment)
                 .add(R.id.layout_content, collectionFragment)
                 .add(R.id.layout_content, historyFragment)
                 .add(R.id.layout_content, recipeFragment)
-                .show(categoryFragment)
+                .show(mainFragment)
+                .hide(categoryFragment)
                 .hide(collectionFragment)
                 .hide(historyFragment)
                 .hide(recipeFragment)

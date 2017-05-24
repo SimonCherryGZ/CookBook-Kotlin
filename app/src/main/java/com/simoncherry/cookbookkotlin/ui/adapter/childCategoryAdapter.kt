@@ -37,12 +37,6 @@ class ChildCategoryAdapter(
         val mobCategory = mData[position]
         holder.tvName.text = mobCategory.name
 
-        if (mobCategory.isSelected) {
-            holder.layoutRoot.setBackgroundColor(Color.WHITE)
-        } else {
-            holder.layoutRoot.setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray_inactive))
-        }
-
         holder.layoutRoot.setOnClickListener {
             onItemClickListener?.onItemClick(position)
         }
