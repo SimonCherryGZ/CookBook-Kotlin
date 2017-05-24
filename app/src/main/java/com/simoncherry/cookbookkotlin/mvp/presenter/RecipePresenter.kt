@@ -1,12 +1,11 @@
 package com.simoncherry.cookbookkotlin.mvp.presenter
 
 import com.simoncherry.cookbookkotlin.api.MobAPIService
-import com.simoncherry.cookbookkotlin.model.MobRecipe
 import com.simoncherry.cookbookkotlin.model.MobRecipeResult
 import com.simoncherry.cookbookkotlin.mvp.contract.RecipeContract
 import com.simoncherry.cookbookkotlin.rx.CommonSubscriber
 import com.simoncherry.cookbookkotlin.util.RxUtils
-import java.util.HashMap
+import java.util.*
 
 /**
  * <pre>

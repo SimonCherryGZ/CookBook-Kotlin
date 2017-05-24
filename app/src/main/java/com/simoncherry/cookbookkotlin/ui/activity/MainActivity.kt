@@ -22,7 +22,7 @@ class MainActivity : SimpleActivity(),
 
     private lateinit var fragmentManager: FragmentManager
     private lateinit var currentFragment: Fragment
-    private var previousFragment: Fragment? = null
+    private lateinit var previousFragment: Fragment
     private lateinit var categoryFragment: CategoryFragment
     private lateinit var recipeFragment: RecipeFragment
     private var exitTime : Long = 0
@@ -38,14 +38,21 @@ class MainActivity : SimpleActivity(),
 
     override fun onBackPressed() {
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
-        if (drawer.isDrawerOpen(GravityCompat.START))
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
-        else
-            if ((System.currentTimeMillis() - exitTime) > 2000) {
-                Toast.makeText(applicationContext, "再按一次退出程序", Toast.LENGTH_SHORT).show()
-                exitTime = System.currentTimeMillis()
-            } else
-                super.onBackPressed()
+        } else {
+            if (previousFragment is CategoryFragment && currentFragment is RecipeFragment) {
+                backToFragment(currentFragment, previousFragment)
+                toolbar.setTitle(R.string.main_title_category)
+            } else {
+                if ((System.currentTimeMillis() - exitTime) > 2000) {
+                    Toast.makeText(applicationContext, "再按一次退出程序", Toast.LENGTH_SHORT).show()
+                    exitTime = System.currentTimeMillis()
+                } else {
+                    super.onBackPressed()
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -57,7 +64,10 @@ class MainActivity : SimpleActivity(),
         val id = item.itemId
         when (id) {
             R.id.nav_home -> toolbar.setTitle(R.string.main_title_home)
-            R.id.nav_category -> toolbar.setTitle(R.string.main_title_category)
+            R.id.nav_category -> {
+                toolbar.setTitle(R.string.main_title_category)
+                switchFragment(currentFragment, categoryFragment)
+            }
             R.id.nav_collection -> toolbar.setTitle(R.string.main_title_collection)
             R.id.nav_history -> toolbar.setTitle(R.string.main_title_history)
             R.id.nav_manage -> toolbar.setTitle(R.string.main_title_setting)
@@ -122,7 +132,7 @@ class MainActivity : SimpleActivity(),
                 .hide(from)
                 .show(to)
                 .commit()
-        previousFragment = null
+        previousFragment = to
         currentFragment = to
     }
 
