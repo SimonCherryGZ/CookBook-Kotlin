@@ -1,13 +1,10 @@
 package com.simoncherry.cookbookkotlin.util
 
-import android.os.Handler
-import android.widget.Toast
-import android.os.Looper
-import android.R.attr.gravity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.support.annotation.StringRes
-
-
+import android.widget.Toast
 
 
 /**

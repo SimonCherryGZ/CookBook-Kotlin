@@ -9,7 +9,7 @@ import com.simoncherry.cookbookkotlin.mvp.contract.SplashContract
 import com.simoncherry.cookbookkotlin.mvp.presenter.SplashPresenter
 import com.simoncherry.cookbookkotlin.util.RealmHelper
 import io.realm.Realm
-import java.util.ArrayList
+import java.util.*
 
 class SplashActivity : BaseActivity<SplashContract.View, SplashContract.Presenter>(), SplashContract.View {
 

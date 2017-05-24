@@ -6,8 +6,8 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import com.simoncherry.cookbookkotlin.R
+import com.simoncherry.cookbookkotlin.loadUrl
 import com.simoncherry.cookbookkotlin.model.MobRecipe
 import kotlinx.android.synthetic.main.item_recipe.view.*
 
@@ -29,15 +29,7 @@ class RecipeAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val recipe = mData[position]
-        val thumbnail = recipe.thumbnail
-        if (thumbnail != null) {
-            Glide.with(mContext).load(thumbnail)
-                    .placeholder(R.drawable.default_img)
-                    .error(R.drawable.default_img)
-                    .into(holder.ivThumbnail)
-        } else {
-            holder.ivThumbnail.setImageResource(R.drawable.default_img)
-        }
+        holder.ivThumbnail.loadUrl(recipe.thumbnail ?: "")
 
         val name = recipe.name
         holder.tvName.text = name ?: TXT_DEFAULT

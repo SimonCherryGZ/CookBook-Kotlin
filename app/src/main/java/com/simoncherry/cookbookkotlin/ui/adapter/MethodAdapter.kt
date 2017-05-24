@@ -5,8 +5,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import com.simoncherry.cookbookkotlin.R
+import com.simoncherry.cookbookkotlin.loadUrl
 import com.simoncherry.cookbookkotlin.model.MobRecipeMethod
 import kotlinx.android.synthetic.main.item_method.view.*
 
@@ -38,10 +38,7 @@ class MethodAdapter(
         val url = method.img
         if (url != null) {
             holder.ivImg.visibility = View.VISIBLE
-            Glide.with(mContext).load(url)
-                    .placeholder(R.drawable.default_img)
-                    .error(R.drawable.default_img)
-                    .into(holder.ivImg)
+            holder.ivImg.loadUrl(url)
         } else {
             holder.ivImg.visibility = View.GONE
         }

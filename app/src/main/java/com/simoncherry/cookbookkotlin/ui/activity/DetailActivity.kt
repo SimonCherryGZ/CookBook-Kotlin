@@ -10,12 +10,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
-import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kogitune.activity_transition.ActivityTransition
 import com.kogitune.activity_transition.ExitActivityTransition
 import com.simoncherry.cookbookkotlin.R
+import com.simoncherry.cookbookkotlin.loadUrl
 import com.simoncherry.cookbookkotlin.model.*
 import com.simoncherry.cookbookkotlin.mvp.contract.DetailContract
 import com.simoncherry.cookbookkotlin.mvp.presenter.DetailPresenter
@@ -116,12 +116,7 @@ class DetailActivity : BaseSwipeBackActivity<DetailContract.View, DetailContract
     private fun initData() {
         val intent = intent
         val thumbnail = intent.getStringExtra(KEY_THUMBNAIL)
-        if (thumbnail != null) {
-            Glide.with(mContext).load(thumbnail)
-                    .placeholder(R.drawable.default_img)
-                    .error(R.drawable.default_img)
-                    .into(iv_img)
-        }
+        iv_img.loadUrl(thumbnail ?: "")
 
         recipeId = intent.getStringExtra(KEY_RECIPE_ID)
         val tempId = recipeId
@@ -218,11 +213,7 @@ class DetailActivity : BaseSwipeBackActivity<DetailContract.View, DetailContract
     private fun handleRecipeResult(value: MobRecipe) {
         mobRecipe = value
 
-        val url = mobRecipe.thumbnail
-        Glide.with(mContext).load(url ?: "")
-                .placeholder(R.drawable.default_img)
-                .error(R.drawable.default_img)
-                .into(iv_img)
+        iv_img.loadUrl(mobRecipe.thumbnail ?: "")
 
         val title = value.name
         if (title != null) {

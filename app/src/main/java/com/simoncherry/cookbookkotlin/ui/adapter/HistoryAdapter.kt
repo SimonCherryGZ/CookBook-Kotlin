@@ -5,8 +5,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import com.simoncherry.cookbookkotlin.R
+import com.simoncherry.cookbookkotlin.loadUrl
 import com.simoncherry.cookbookkotlin.model.RealmHistory
 import kotlinx.android.synthetic.main.item_history.view.*
 
@@ -34,10 +34,7 @@ class HistoryAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val recipe : RealmHistory = mData[position]
-        Glide.with(mContext).load(recipe.thumbnail)
-                .placeholder(R.drawable.default_img)
-                .error(R.drawable.default_img)
-                .into(holder.ivThumbnail)
+        holder.ivThumbnail.loadUrl(recipe.thumbnail ?: "")
         holder.tvName.text = recipe.name
         holder.tvSummary.text = recipe.summary
         holder.tvIngredients.text = recipe.ingredients
