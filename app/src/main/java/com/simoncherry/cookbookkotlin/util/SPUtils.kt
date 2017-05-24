@@ -12,11 +12,22 @@ import android.content.SharedPreferences
  *     version: 1.0
  * </pre>
  */
-class SPUtils {
+class SPUtils private constructor() {
 
     companion object {
         private lateinit var sp: SharedPreferences
         private lateinit var editor: SharedPreferences.Editor
+
+        private var instance : SPUtils? = null
+
+        fun init(context: Context, spName: String) {
+            if (instance == null) {
+                instance = SPUtils()
+                sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE)
+                editor = sp.edit()
+                editor.apply()
+            }
+        }
 
         /**
          * SPUtils构造函数
@@ -25,11 +36,11 @@ class SPUtils {
 
          * @param spName spName
          */
-        fun SPUtils(context: Context, spName: String) {
-            sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE)
-            editor = sp.edit()
-            editor.apply()
-        }
+//        fun SPUtils(context: Context, spName: String){
+//            sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE)
+//            editor = sp.edit()
+//            editor.apply()
+//        }
 
         /**
          * SP中写入String类型value

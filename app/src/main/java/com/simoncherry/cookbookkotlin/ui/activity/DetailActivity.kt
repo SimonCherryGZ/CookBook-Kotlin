@@ -16,9 +16,7 @@ import com.google.gson.reflect.TypeToken
 import com.kogitune.activity_transition.ActivityTransition
 import com.kogitune.activity_transition.ExitActivityTransition
 import com.simoncherry.cookbookkotlin.R
-import com.simoncherry.cookbookkotlin.model.MobRecipe
-import com.simoncherry.cookbookkotlin.model.MobRecipeMethod
-import com.simoncherry.cookbookkotlin.model.RealmCollection
+import com.simoncherry.cookbookkotlin.model.*
 import com.simoncherry.cookbookkotlin.mvp.contract.DetailContract
 import com.simoncherry.cookbookkotlin.mvp.presenter.DetailPresenter
 import com.simoncherry.cookbookkotlin.ui.adapter.MethodAdapter
@@ -42,10 +40,9 @@ class DetailActivity : BaseSwipeBackActivity<DetailContract.View, DetailContract
 
     private lateinit var realm: Realm
     private lateinit var realmResults: RealmResults<RealmCollection>
-    private var spUtils: SPUtils? = null
 
     private lateinit var mobRecipe: MobRecipe
-    private var recipeId: String? = ""
+    private var recipeId: String = ""
 
 
     companion object {
@@ -128,7 +125,7 @@ class DetailActivity : BaseSwipeBackActivity<DetailContract.View, DetailContract
 
         recipeId = intent.getStringExtra(KEY_RECIPE_ID)
         val tempId = recipeId
-        if (tempId != null && !TextUtils.isEmpty(tempId)) {
+        if (!TextUtils.isEmpty(tempId)) {
             mPresenter?.queryDetail(tempId)
         } else {
             recipeId = ""
@@ -253,6 +250,32 @@ class DetailActivity : BaseSwipeBackActivity<DetailContract.View, DetailContract
                     mData.addAll(methodList)
                     mAdapter.notifyDataSetChanged()
                 }
+            }
+        }
+        // 更新历史
+        saveHistoryToRealm()
+    }
+
+    private fun saveHistoryToRealm() {
+        if (mobRecipe.recipe != null) {
+            if (RealmHelper.retrieveHistoryByMenuId(realm, recipeId).size == 0) {  // 如果没有该条历史
+                SPUtils.init(mContext, Constant.SP_NAME)
+                val limit = SPUtils.getInt(Constant.SP_HISTORY_LIMIT, Constant.DEFAULT_HISTORY_LIMIT)
+                if (RealmHelper.retrieveHistory(realm).size >= limit) {
+                    RealmHelper.deleteFirstHistory(realm)
+                }
+
+                val recipeDetail = mobRecipe.recipe
+                val realmHistory = RealmHistory(
+                        0,
+                        mobRecipe.ctgTitles,
+                        mobRecipe.menuId,
+                        mobRecipe.name,
+                        recipeDetail?.sumary,
+                        recipeDetail?.ingredients,
+                        mobRecipe.thumbnail,
+                        Date())
+                RealmHelper.createHistory(realm, realmHistory)
             }
         }
     }
