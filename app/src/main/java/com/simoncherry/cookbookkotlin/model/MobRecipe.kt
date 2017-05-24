@@ -15,5 +15,5 @@ data class MobRecipe(
         var menuId: String?,
         var name: String?,
         var recipe: MobRecipeDetail?,
-        var thumbnail: String
+        var thumbnail: String?
 )

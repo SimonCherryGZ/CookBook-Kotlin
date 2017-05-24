@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.simoncherry.cookbookkotlin.R
 import com.simoncherry.cookbookkotlin.ui.fragment.CategoryFragment
+import com.simoncherry.cookbookkotlin.ui.fragment.RecipeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -19,10 +20,11 @@ class MainActivity : SimpleActivity(),
         NavigationView.OnNavigationItemSelectedListener,
         CategoryFragment.OnFragmentInteractionListener{
 
-    lateinit var fragmentManager: FragmentManager
-    private var currentFragment: Fragment? = null
+    private lateinit var fragmentManager: FragmentManager
+    private lateinit var currentFragment: Fragment
     private var previousFragment: Fragment? = null
-    private var categoryFragment: CategoryFragment? = null
+    private lateinit var categoryFragment: CategoryFragment
+    private lateinit var recipeFragment: RecipeFragment
     private var exitTime : Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,13 +91,16 @@ class MainActivity : SimpleActivity(),
         val transaction = fragmentManager.beginTransaction()
 
         categoryFragment = CategoryFragment.newInstance()
+        recipeFragment = RecipeFragment.newInstance("0010001010")
 
         previousFragment = categoryFragment
         currentFragment = categoryFragment
 
         transaction
                 .add(R.id.layout_content, categoryFragment)
+                .add(R.id.layout_content, recipeFragment)
                 .show(categoryFragment)
+                .hide(recipeFragment)
                 .commit()
     }
 
@@ -122,6 +127,8 @@ class MainActivity : SimpleActivity(),
     }
 
     override fun onClickCategory(ctgId: String, name: String) {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        recipeFragment.changeCategory(ctgId)
+        switchFragment(currentFragment, recipeFragment)
+        toolbar.title = "分类 - " + name
     }
 }

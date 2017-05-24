@@ -1,11 +1,14 @@
-package com.simoncherry.cookbookkotlin.ui.activity
+package com.simoncherry.cookbookkotlin.ui.fragment
 
 import android.R
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.Fragment
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import com.simoncherry.cookbookkotlin.mvp.presenter.BasePresenter
@@ -16,37 +19,46 @@ import com.simoncherry.cookbookkotlin.util.ToastUtils
  * <pre>
  *     author : Donald
  *     e-mail : xxx@xx
- *     time   : 2017/05/22
+ *     time   : 2017/05/24
  *     desc   :
  *     version: 1.0
  * </pre>
  */
-abstract class BaseActivity<in V : BaseView, T : BasePresenter<V>> : AppCompatActivity(), BaseView {
-    var mPresenter: T? = null
-    lateinit var mContext: Activity
-    var mProgressBar: ProgressBar? = null
+abstract class BaseFragment<in V : BaseView, T : BasePresenter<V>> : Fragment(), BaseView {
+    protected var mPresenter: T? = null
+    lateinit var mActivity: Activity
+    lateinit var mContext: Context
+    private var mProgressBar: ProgressBar? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(getLayout())
-        mContext = this
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(getLayout(), container, false)
         initComponent()
-        mPresenter?.attachView(this as V)
+        if (mPresenter != null) {
+            mPresenter?.attachView(this as V)
+        }
+        return view
     }
 
     protected abstract fun getLayout(): Int
     protected abstract fun initComponent()
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         mPresenter?.detachView()
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        mActivity = context as Activity
+        mContext = context
+    }
+
     private fun initProgressBar() {
-        mProgressBar = ProgressBar(this, null, R.attr.progressBarStyleLarge)
+        mProgressBar = ProgressBar(mContext, null, R.attr.progressBarStyleLarge)
         val layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
         layoutParams.gravity = Gravity.CENTER
-        addContentView(mProgressBar, layoutParams)
+        mActivity.addContentView(mProgressBar, layoutParams)
     }
 
     override fun onShowProgressBar() {
