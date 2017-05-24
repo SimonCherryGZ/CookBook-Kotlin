@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.simoncherry.cookbookkotlin.R
 import com.simoncherry.cookbookkotlin.ui.fragment.CategoryFragment
+import com.simoncherry.cookbookkotlin.ui.fragment.CollectionFragment
 import com.simoncherry.cookbookkotlin.ui.fragment.RecipeFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -24,6 +25,7 @@ class MainActivity : SimpleActivity(),
     private lateinit var currentFragment: Fragment
     private lateinit var previousFragment: Fragment
     private lateinit var categoryFragment: CategoryFragment
+    private lateinit var collectionFragment: CollectionFragment
     private lateinit var recipeFragment: RecipeFragment
     private var exitTime : Long = 0
 
@@ -68,7 +70,10 @@ class MainActivity : SimpleActivity(),
                 toolbar.setTitle(R.string.main_title_category)
                 switchFragment(currentFragment, categoryFragment)
             }
-            R.id.nav_collection -> toolbar.setTitle(R.string.main_title_collection)
+            R.id.nav_collection -> {
+                toolbar.setTitle(R.string.main_title_collection)
+                switchFragment(currentFragment, collectionFragment)
+            }
             R.id.nav_history -> toolbar.setTitle(R.string.main_title_history)
             R.id.nav_manage -> toolbar.setTitle(R.string.main_title_setting)
         }
@@ -101,6 +106,7 @@ class MainActivity : SimpleActivity(),
         val transaction = fragmentManager.beginTransaction()
 
         categoryFragment = CategoryFragment.newInstance()
+        collectionFragment = CollectionFragment.newInstance()
         recipeFragment = RecipeFragment.newInstance("0010001010")
 
         previousFragment = categoryFragment
@@ -108,8 +114,10 @@ class MainActivity : SimpleActivity(),
 
         transaction
                 .add(R.id.layout_content, categoryFragment)
+                .add(R.id.layout_content, collectionFragment)
                 .add(R.id.layout_content, recipeFragment)
                 .show(categoryFragment)
+                .hide(collectionFragment)
                 .hide(recipeFragment)
                 .commit()
     }
