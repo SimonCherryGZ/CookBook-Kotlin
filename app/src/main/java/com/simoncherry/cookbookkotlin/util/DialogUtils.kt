@@ -25,7 +25,9 @@ class DialogUtils {
             builder.setTitle(title)
             builder.setMessage(message)
             if (view != null) {
-                builder.setView(view, 60, 20, 60, 20)
+                view.setPadding(60, 20, 60, 20)
+                //builder.setView(view, 60, 20, 60, 20)
+                builder.setView(view)
             }
             builder.setPositiveButton("确定", positiveCallback)
             builder.setNegativeButton("取消", negativeCallback)

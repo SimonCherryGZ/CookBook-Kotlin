@@ -29,7 +29,7 @@ class RecipeAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val recipe = mData[position]
-        holder.ivThumbnail.loadUrl(recipe.thumbnail ?: "")
+        holder.ivThumbnail.loadUrl(recipe.thumbnail)
 
         val name = recipe.name
         holder.tvName.text = name ?: TXT_DEFAULT

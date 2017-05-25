@@ -34,7 +34,7 @@ class HistoryAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val recipe : RealmHistory = mData[position]
-        holder.ivThumbnail.loadUrl(recipe.thumbnail ?: "")
+        holder.ivThumbnail.loadUrl(recipe.thumbnail)
         holder.tvName.text = recipe.name
         holder.tvSummary.text = recipe.summary
         holder.tvIngredients.text = recipe.ingredients

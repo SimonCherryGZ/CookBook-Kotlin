@@ -4,6 +4,7 @@ import android.annotation.TargetApi
 import android.app.Activity
 import android.graphics.Color
 import android.os.Build
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -52,7 +53,8 @@ class StatusBarUtils {
                 val window = activity.window
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                window.statusBarColor = activity.resources.getColor(colorId)
+                //window.statusBarColor = activity.resources.getColor(colorId)
+                window.statusBarColor = ContextCompat.getColor(activity, colorId)
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 //使用SystemBarTint库使4.4版本状态栏变色，需要先将状态栏设置为透明
                 transparencyBar(activity)

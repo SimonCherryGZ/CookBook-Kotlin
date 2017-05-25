@@ -101,9 +101,7 @@ class DataCleanManager {
             cleanDatabases(context)
             cleanSharedPreference(context)
             cleanFiles(context)
-            if (filepath == null) {
-                return
-            }
+
             for (filePath in filepath) {
                 cleanCustomCache(filePath)
             }
@@ -130,7 +128,7 @@ class DataCleanManager {
             }
             if (file.isDirectory) {
                 val childFiles = file.listFiles()
-                if (childFiles == null || childFiles.size == 0) {
+                if (childFiles == null || childFiles.isEmpty()) {
                     file.delete()
                     return
                 }
@@ -152,9 +150,9 @@ class DataCleanManager {
                 for (i in fileList!!.indices) {
                     // 如果下面还有文件
                     if (fileList[i].isDirectory) {
-                        size = size + getFolderSize(fileList[i])
+                        size += getFolderSize(fileList[i])
                     } else {
-                        size = size + fileList[i].length()
+                        size += fileList[i].length()
                     }
                 }
             } catch (e: Exception) {
@@ -187,7 +185,7 @@ class DataCleanManager {
                         if (!file.isDirectory) {// 如果是文件，删除
                             file.delete()
                         } else {// 目录
-                            if (file.listFiles()!!.size == 0) {// 目录下没有文件或者目录，删除
+                            if (file.listFiles()!!.isEmpty()) {// 目录下没有文件或者目录，删除
                                 file.delete()
                             }
                         }

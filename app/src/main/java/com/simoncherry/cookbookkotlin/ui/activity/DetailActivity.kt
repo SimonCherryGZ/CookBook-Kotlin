@@ -116,7 +116,7 @@ class DetailActivity : BaseSwipeBackActivity<DetailContract.View, DetailContract
     private fun initData() {
         val intent = intent
         val thumbnail = intent.getStringExtra(KEY_THUMBNAIL)
-        iv_img.loadUrl(thumbnail ?: "")
+        iv_img.loadUrl(thumbnail)
 
         recipeId = intent.getStringExtra(KEY_RECIPE_ID)
         val tempId = recipeId
@@ -213,7 +213,7 @@ class DetailActivity : BaseSwipeBackActivity<DetailContract.View, DetailContract
     private fun handleRecipeResult(value: MobRecipe) {
         mobRecipe = value
 
-        iv_img.loadUrl(mobRecipe.thumbnail ?: "")
+        iv_img.loadUrl(mobRecipe.thumbnail)
 
         val title = value.name
         if (title != null) {
