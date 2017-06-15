@@ -145,10 +145,10 @@ class CategoryFragment : SimpleFragment() {
                 parentList.add(RealmHelper.convertRealmCategoryToMobCategory(category))
                 val childCategory = element.where().equalTo("parentId", category.ctgId).findAll()
                 if (childCategory != null) {
-                    val childList = ArrayList<MobCategory>()
-                    for (category1 in childCategory) {
-                        childList.add(RealmHelper.convertRealmCategoryToMobCategory(category1))
-                    }
+//                    for (category1 in childCategory) {
+//                        childList.add(RealmHelper.convertRealmCategoryToMobCategory(category1))
+//                    }
+                    val childList = childCategory.map { RealmHelper.convertRealmCategoryToMobCategory(it) }  // replace with map
                     allChildList.add(childList)
                 }
             }

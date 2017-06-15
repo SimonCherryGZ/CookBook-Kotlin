@@ -141,6 +141,7 @@ public class ChannelTagView extends LinearLayout {
         columnSpace = array.getDimensionPixelOffset(R.styleable.channel_tag_style_columnSpace, 10);
         channelItemTxColor = array.getColor(R.styleable.channel_tag_style_channelItemTxColor, 0xff000000);
         channelItemTxSize = array.getDimensionPixelOffset(R.styleable.channel_tag_style_channelItemTxSize, 39);
+        array.recycle();
         setOrientation(VERTICAL);
         init();
     }

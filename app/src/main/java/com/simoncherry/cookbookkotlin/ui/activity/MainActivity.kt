@@ -66,8 +66,9 @@ class MainActivity : SimpleActivity(),
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
-            if (searchView != null && !searchView!!.isIconified) {
-                searchView?.isIconified = true
+            val searchView = searchView  // local
+            if (searchView != null && !searchView.isIconified) {
+                searchView.isIconified = true
             } else if (previousFragment is CategoryFragment && currentFragment is RecipeFragment) {
                 backToFragment(currentFragment, previousFragment)
                 toolbar.setTitle(R.string.main_title_category)
