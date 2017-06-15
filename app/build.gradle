@@ -38,6 +38,14 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2') {
+        exclude module: 'espresso-core'
+        exclude module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+        exclude module: 'appcompat-v7'
+        exclude module: 'support-annotations'
+        exclude module: 'design'
+    }
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:2.8.9"
 

@@ -117,8 +117,8 @@ class RecipeFragment : BaseFragment<RecipeContract.View, RecipeContract.Presente
                     val recipe = mData[position]
                     val menuId = recipe.menuId
                     val thumbnail = recipe.thumbnail
-                    if (menuId != null && thumbnail != null) {
-                        startDetailActivity(view, menuId, thumbnail)
+                    if (menuId != null) {
+                        startDetailActivity(view, menuId, thumbnail?:"")
                     }
                 }
             }

@@ -3,6 +3,7 @@ package com.simoncherry.cookbookkotlin;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -17,14 +18,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressKey;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -75,23 +77,22 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
+    public void testQuerySuggestion() {
+        onView(withId(R.id.search_view)).perform(click());
+        onView(withText("炒面"))
+                .inRoot(withDecorView(Matchers.not(Matchers.is(mMainActivityTestRule.getActivity().getWindow().getDecorView()))))
+                .perform(click());
+        onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.toolbar))))
+                .check(matches(withText("查询 - 炒面")));
+    }
+
+    @Test
     public void testAddChannel() {
         onView(withId(R.id.iv_expand)).perform(click());
         onView(withId(R.id.layout_channel)).check(matches(isDisplayed()));
         onView(withText("素菜")).perform(click());
         onView(withId(R.id.iv_expand)).perform(click());
         onView(withId(R.id.layout_channel)).check(matches((not(isDisplayed()))));
-
-//        onView(withId(R.id.layout_tab)).check(matches(withText("素菜")));
-
-//        onView(allOf(instanceOf(TextView.class), withParent(withId(R.id.layout_tab))))
-//                .check(matches(withText("素菜")));
-
-//        onView(allOf(withText("素菜"), isDescendantOfA(withId(R.id.layout_tab))))
-//                .check(matches(isDisplayed()));
-
-//        onView(allOf(instanceOf(AppCompatTextView.class), isDescendantOfA(withId(R.id.layout_tab))))
-//                .check(matches(withText("素菜")));
 
         ViewInteraction tabView = onView(
                 allOf(instanceOf(AppCompatTextView.class), isDescendantOfA(withId(R.id.layout_tab)), Matchers.not(withText("荤菜"))));
@@ -109,5 +110,16 @@ public class ExampleInstrumentedTest {
 
         ViewInteraction tabView = onView(allOf(instanceOf(AppCompatTextView.class), isDescendantOfA(withId(R.id.layout_tab)), withText("素菜")));
         tabView.check(doesNotExist());
+    }
+
+    @Test
+    public void testOpenRecipeDetail() {
+        onView(withId(R.id.fab)).check(doesNotExist());
+//        onView(withId(R.id.rv_recipe)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(allOf(withId(R.id.rv_recipe), withParent(allOf(withId(R.id.layout_recipe), isDisplayed()))))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.fab)).check(matches(isDisplayed()));
+        pressBack();
+        onView(withId(R.id.fab)).check(doesNotExist());
     }
 }
