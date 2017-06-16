@@ -1,10 +1,12 @@
 package com.simoncherry.cookbookkotlin;
 
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.simoncherry.cookbookkotlin.ui.adapter.HistoryAdapter;
@@ -25,9 +27,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFro
  *     version: 1.0
  * </pre>
  */
-public class CustomMatcher {
+class CustomMatcher {
 
-    public static  <T> Matcher<T> first(final Matcher<T> matcher) {
+    /*
+    * 匹配第一个符合匹配条件的项
+    */
+    static <T> Matcher<T> first(final Matcher<T> matcher) {
         return new BaseMatcher<T>() {
             boolean isFirst = true;
 
@@ -48,7 +53,35 @@ public class CustomMatcher {
         };
     }
 
-    public static String getText(final Matcher<View> matcher) {
+    /*
+    * 匹配拥有指定数量Child的项
+    */
+    public static Matcher<View> withChildViewCount(final int count, final Matcher<View> childMatcher) {
+        return new BoundedMatcher<View, ViewGroup>(ViewGroup.class) {
+            @Override
+            protected boolean matchesSafely(ViewGroup viewGroup) {
+                int matchCount = 0;
+                for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                    if (childMatcher.matches(viewGroup.getChildAt(i))) {
+                        matchCount++;
+                    }
+                }
+
+                return matchCount == count;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("ViewGroup with child-count=" + count + " and");
+                childMatcher.describeTo(description);
+            }
+        };
+    }
+
+    /*
+    * 获取匹配的TextView的文本内容
+    */
+    static String getText(final Matcher<View> matcher) {
         final String[] stringHolder = { null };
         onView(matcher).perform(new ViewAction() {
             @Override
@@ -70,7 +103,10 @@ public class CustomMatcher {
         return stringHolder[0];
     }
 
-    public static int getRecyclerViewItemCount(final Matcher<View> matcher) {
+    /*
+    * 获取匹配的RecyclerView的Item数量
+    */
+    static int getRecyclerViewItemCount(final Matcher<View> matcher) {
         final int[] count = {0};
         onView(matcher).perform(new ViewAction() {
             @Override
@@ -80,7 +116,7 @@ public class CustomMatcher {
 
             @Override
             public String getDescription() {
-                return "getting text from a TextView";
+                return "getting RecyclerView Item Count";
             }
 
             @Override
@@ -93,7 +129,10 @@ public class CustomMatcher {
         return count[0];
     }
 
-    public static Matcher<RecyclerView.ViewHolder> withHistoryTitle(final String title) {
+    /*
+    * 匹配具有指定标题的近期浏览历史项
+    */
+    static Matcher<RecyclerView.ViewHolder> withHistoryTitle(final String title) {
         return new BoundedMatcher<RecyclerView.ViewHolder, HistoryAdapter.MyViewHolder>(HistoryAdapter.MyViewHolder.class) {
             @Override
             protected boolean matchesSafely(HistoryAdapter.MyViewHolder item) {
@@ -105,5 +144,46 @@ public class CustomMatcher {
                 description.appendText("view holder with title: " + title);
             }
         };
+    }
+
+//    public static Matcher<Object> withCollapsibleToolbarTitle(final Matcher<String> textMatcher) {
+//        return new BoundedMatcher<Object, CollapsingToolbarLayout>(CollapsingToolbarLayout.class) {
+//            @Override public void describeTo(Description description) {
+//                description.appendText("with toolbar title: "); textMatcher.describeTo(description);
+//            }
+//
+//            @Override protected boolean matchesSafely(CollapsingToolbarLayout toolbarLayout) {
+//                return textMatcher.matches(toolbarLayout.getTitle());
+//            }
+//        };
+//    }
+
+    /*
+    * 获取匹配的CollapsingToolbarLayout的Title内容
+    */
+    static String getCollapsibleToolbarTitle(final Matcher<View> matcher) {
+        final String[] stringHolder = { null };
+        onView(matcher).perform(new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isAssignableFrom(CollapsingToolbarLayout.class);
+            }
+
+            @Override
+            public String getDescription() {
+                return "getting text from a TextView";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) view; //Save, because of check in getConstraints()
+                CharSequence title = toolbarLayout.getTitle();
+                if (title == null) {
+                    title = "";
+                }
+                stringHolder[0] = title.toString();
+            }
+        });
+        return stringHolder[0];
     }
 }

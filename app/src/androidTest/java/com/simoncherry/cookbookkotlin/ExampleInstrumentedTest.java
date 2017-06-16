@@ -37,6 +37,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.simoncherry.cookbookkotlin.CustomMatcher.first;
+import static com.simoncherry.cookbookkotlin.CustomMatcher.getCollapsibleToolbarTitle;
+import static com.simoncherry.cookbookkotlin.CustomMatcher.getRecyclerViewItemCount;
 import static com.simoncherry.cookbookkotlin.CustomMatcher.getText;
 import static com.simoncherry.cookbookkotlin.CustomMatcher.withHistoryTitle;
 import static org.hamcrest.Matchers.allOf;
@@ -57,6 +59,9 @@ public class ExampleInstrumentedTest {
             new ActivityTestRule<MainActivity>(MainActivity.class) {
             };
 
+    /*
+    * 测试打开、收起频道管理界面
+    */
     @Test
     public void testShowChannelLayout() {
         onView(withId(R.id.iv_expand)).perform(click());
@@ -65,6 +70,9 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.layout_channel)).check(matches((not(isDisplayed()))));
     }
 
+    /*
+    * 测试根据关键词搜索菜谱
+    */
     @Test
     public void testQueryRecipe() {
         onView(withId(R.id.search_view)).perform(click());
@@ -74,6 +82,9 @@ public class ExampleInstrumentedTest {
                 .check(matches(withText("查询 - 炒面")));
     }
 
+    /*
+    * 测试通过点击最近搜索建议项来搜索菜谱
+    */
     @Test
     public void testQuerySuggestion() {
         onView(withId(R.id.search_view)).perform(click());
@@ -84,6 +95,9 @@ public class ExampleInstrumentedTest {
                 .check(matches(withText("查询 - 炒面")));
     }
 
+    /*
+    * 测试添加频道
+    */
     @Test
     public void testAddChannel() {
         onView(withId(R.id.iv_expand)).perform(click());
@@ -98,6 +112,9 @@ public class ExampleInstrumentedTest {
         tabView.check(matches(withText("素菜")));
     }
 
+    /*
+    * 测试移除频道
+    */
     @Test
     public void testRemoveChannel() {
         onView(withId(R.id.iv_expand)).perform(click());
@@ -110,6 +127,9 @@ public class ExampleInstrumentedTest {
         tabView.check(doesNotExist());
     }
 
+    /*
+    * 测试打开菜谱详情页面
+    */
     @Test
     public void testOpenRecipeDetail() {
         onView(withId(R.id.fab)).check(doesNotExist());
@@ -120,6 +140,9 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.fab)).check(doesNotExist());
     }
 
+    /*
+     * 测试点击菜谱分类来搜索菜谱
+     */
     @Test
     public void testClickCategory() {
         onView(withId(R.id.drawer_layout)).perform(open());
@@ -168,6 +191,9 @@ public class ExampleInstrumentedTest {
                 .check(matches(withText("分类 - 西餐")));
     }
 
+    /*
+    * 点击第一个菜谱查看详情，然后看近期浏览历史页面中是否存在相应菜谱
+    */
     @Test
     public void testRecipeHistory() {
         // 存在多个RecipeFragment。拿到唯一可见的RecipeFragment的布局layout_recipe，再拿到其中的rv_recipe
@@ -201,6 +227,40 @@ public class ExampleInstrumentedTest {
         onView(matcher).perform(RecyclerViewActions.scrollToHolder(matcher2));
 
         // 检查该菜谱是否存在于近期浏览历史中
+        onView(allOf(withText(title), isDescendantOfA(matcher))).check(matches(isDisplayed()));
+    }
+
+    /*
+    * 点击指定位置菜谱查看详情，然后看近期浏览历史页面中是否存在相应菜谱
+    */
+    @Test
+    public void testRecipeHistory2() {
+        int desirePosition = 6;
+
+        Matcher<View> matcher = allOf(withId(R.id.rv_recipe), withParent(allOf(withId(R.id.layout_recipe), isDisplayed())));
+        int count = getRecyclerViewItemCount(matcher);
+        System.out.println("目前RecyclerView有多少个Item: " + count);
+
+        if (desirePosition >= count) {
+            desirePosition = count-1;
+        }
+        onView(matcher).perform(RecyclerViewActions.scrollToPosition(desirePosition));
+
+        onView(allOf(withId(R.id.rv_recipe), withParent(allOf(withId(R.id.layout_recipe), isDisplayed()))))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(desirePosition, click()));
+
+        String title = getCollapsibleToolbarTitle(withId(R.id.layout_tool_bar));
+        System.out.println("要匹配的菜谱名称: " + title);
+        pressBack();
+
+        onView(withId(R.id.drawer_layout)).perform(open());
+        onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_history));
+
+        matcher = allOf(withId(R.id.rv_recipe), withParent(allOf(withId(R.id.layout_history), isDisplayed())));
+        Matcher<RecyclerView.ViewHolder> matcher2 = withHistoryTitle(title);
+        onView(matcher).perform(RecyclerViewActions.scrollToHolder(matcher2));
+
         onView(allOf(withText(title), isDescendantOfA(matcher))).check(matches(isDisplayed()));
     }
 }
