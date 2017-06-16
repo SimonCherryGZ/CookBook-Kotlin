@@ -40,6 +40,7 @@ import static com.simoncherry.cookbookkotlin.CustomMatcher.first;
 import static com.simoncherry.cookbookkotlin.CustomMatcher.getCollapsibleToolbarTitle;
 import static com.simoncherry.cookbookkotlin.CustomMatcher.getRecyclerViewItemCount;
 import static com.simoncherry.cookbookkotlin.CustomMatcher.getText;
+import static com.simoncherry.cookbookkotlin.CustomMatcher.withCollectionTitle;
 import static com.simoncherry.cookbookkotlin.CustomMatcher.withHistoryTitle;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
@@ -259,6 +260,40 @@ public class ExampleInstrumentedTest {
 
         matcher = allOf(withId(R.id.rv_recipe), withParent(allOf(withId(R.id.layout_history), isDisplayed())));
         Matcher<RecyclerView.ViewHolder> matcher2 = withHistoryTitle(title);
+        onView(matcher).perform(RecyclerViewActions.scrollToHolder(matcher2));
+
+        onView(allOf(withText(title), isDescendantOfA(matcher))).check(matches(isDisplayed()));
+    }
+
+    /*
+    * 点击指定位置菜谱查看详情，然后看收藏页面中是否存在相应菜谱
+    */
+    @Test
+    public void testRecipeCollection() {
+        int desirePosition = 6;
+
+        Matcher<View> matcher = allOf(withId(R.id.rv_recipe), withParent(allOf(withId(R.id.layout_recipe), isDisplayed())));
+        int count = getRecyclerViewItemCount(matcher);
+        System.out.println("目前RecyclerView有多少个Item: " + count);
+
+        if (desirePosition >= count) {
+            desirePosition = count-1;
+        }
+        onView(matcher).perform(RecyclerViewActions.scrollToPosition(desirePosition));
+
+        onView(allOf(withId(R.id.rv_recipe), withParent(allOf(withId(R.id.layout_recipe), isDisplayed()))))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(desirePosition, click()));
+        String title = getCollapsibleToolbarTitle(withId(R.id.layout_tool_bar));
+        System.out.println("要匹配的菜谱名称: " + title);
+        onView(withId(R.id.fab)).perform(click());
+        pressBack();
+
+        onView(withId(R.id.drawer_layout)).perform(open());
+        onView(withId(R.id.nav_view)).check(matches(isDisplayed()));
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_collection));
+
+        matcher = allOf(withId(R.id.rv_recipe), withParent(allOf(withId(R.id.layout_collection), isDisplayed())));
+        Matcher<RecyclerView.ViewHolder> matcher2 = withCollectionTitle(title);
         onView(matcher).perform(RecyclerViewActions.scrollToHolder(matcher2));
 
         onView(allOf(withText(title), isDescendantOfA(matcher))).check(matches(isDisplayed()));

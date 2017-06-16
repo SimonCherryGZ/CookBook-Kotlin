@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.simoncherry.cookbookkotlin.ui.adapter.CollectionAdapter;
 import com.simoncherry.cookbookkotlin.ui.adapter.HistoryAdapter;
 
 import org.hamcrest.BaseMatcher;
@@ -146,17 +147,22 @@ class CustomMatcher {
         };
     }
 
-//    public static Matcher<Object> withCollapsibleToolbarTitle(final Matcher<String> textMatcher) {
-//        return new BoundedMatcher<Object, CollapsingToolbarLayout>(CollapsingToolbarLayout.class) {
-//            @Override public void describeTo(Description description) {
-//                description.appendText("with toolbar title: "); textMatcher.describeTo(description);
-//            }
-//
-//            @Override protected boolean matchesSafely(CollapsingToolbarLayout toolbarLayout) {
-//                return textMatcher.matches(toolbarLayout.getTitle());
-//            }
-//        };
-//    }
+    /*
+    * 匹配具有指定标题的收藏项
+    */
+    static Matcher<RecyclerView.ViewHolder> withCollectionTitle(final String title) {
+        return new BoundedMatcher<RecyclerView.ViewHolder, CollectionAdapter.MyViewHolder>(CollectionAdapter.MyViewHolder.class) {
+            @Override
+            protected boolean matchesSafely(CollectionAdapter.MyViewHolder item) {
+                return item.getTvName().getText().toString().equalsIgnoreCase(title);
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("view holder with title: " + title);
+            }
+        };
+    }
 
     /*
     * 获取匹配的CollapsingToolbarLayout的Title内容
