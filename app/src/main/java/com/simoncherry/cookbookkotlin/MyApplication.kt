@@ -17,8 +17,13 @@ class MyApplication : Application() {
 
     private val DB_NAME = "cookbookkotlin"
 
+    companion object {
+        lateinit var instance: MyApplication
+    }
+
     override fun onCreate() {
         super.onCreate()
+        instance = this
         Realm.init(this)
         val realmConfiguration = RealmConfiguration.Builder()
                 .name(DB_NAME)

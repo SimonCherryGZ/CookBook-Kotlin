@@ -1,5 +1,8 @@
 package com.simoncherry.cookbookkotlin.model
 
+import com.simoncherry.cookbookkotlin.MyApplication
+import java.io.File
+
 /**
  * <pre>
  *     author : Donald
@@ -17,5 +20,8 @@ class Constant {
 
         val DEFAULT_SAVE_MODE = false
         val DEFAULT_HISTORY_LIMIT = 10
+
+        val PATH_DATA = MyApplication.instance.cacheDir.absolutePath + File.separator + "data"
+        val PATH_CACHE = PATH_DATA + "/NetCache"
     }
 }
