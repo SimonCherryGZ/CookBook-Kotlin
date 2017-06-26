@@ -1,7 +1,8 @@
 
 CookBook-Kotlin
 ===================================
-[CookBook](https://github.com/SimonCherryGZ/CookBook)的Kotlin版
+[CookBook](https://github.com/SimonCherryGZ/CookBook)的Kotlin版  
+
 基于[MobApi菜谱接口](http://api.mob.com/#/apiwiki/cookmenu)的Android应用
   
 实现了以下功能：
@@ -24,7 +25,8 @@ CookBook-Kotlin
 
 参考 
 -----------------------------------  
-  [CookMan by PeOS-China](https://github.com/PeOS-China/CookMan)
+  [CookMan by PeOS-China](https://github.com/PeOS-China/CookMan)  
+  
   [CookBook by SimonCherryGZ](https://github.com/SimonCherryGZ/CookBook)
   
 依赖库 
